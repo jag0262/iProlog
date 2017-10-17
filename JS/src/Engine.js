@@ -123,27 +123,31 @@ var Engine = class Engine {
    * in the symbol table
    */
   getSym = function (w){
-    return //string
+    if(w < 0 || w >= slist.length()){
+      return "BADSYMREF=" + w;
+    }
+    return slist[w].value;
   }
    
-   makeHeap = function (){
-   
+  makeHeap = function (){
+    makeHeap(MINSIZE);
   }
    
   makeHeap = function (size){
-      //size is int  
+      heap = new int[size];
+      clear();
   }
    
   getTop = function (){
-    //return int
+    return top;
   }
    
   setTop = function (top){
-   
+    return this.top = top;
   }
    
   clear = function (){
-    //top=-1
+    top = -1;
   }
    
    /**
@@ -178,16 +182,35 @@ var Engine = class Engine {
   * expands a "Xs lists .." statements to "Xs holds" statements
   */
 
-  private final static ArrayList<String[]> maybeExpand(final ArrayList<String> Ws) {
-    
+  maybeExpand = function(Ws) {
+    W = Ws[0];
+    if (W.length() < 2 || !"l:".is(W.substring(0,2))){
+      return null;
+    }
+
+    l = Ws.length();
+    Rss = new ArrayList();
+    V = W.substring(2);
+
+    for (var i = 1; i < l; i++) {
+      Rs = new String[4];
+      Vi = 1 == i ? V : V + "__" + (i - 1);
+      Vii = V + "__" + i;
+      Rs[0] = "h:" + Vi;
+      Rs[1] = "c:list";
+      Rs[2] = Ws[i].value;
+      Rs[3] = i == l - 1 ? "c:nil" : "v:" + Vii;
+      Rss.push(Rs);
+    }
+    return Rss;
   }
   
 
   /**
    * expands, if needed, "lists" statements in sequence of statements
    */
-  private final static ArrayList<String[]> mapExpand(final ArrayList<ArrayList<String>> Wss) {
-    
+  mapExpand(Wss) {
+    Rss = new ArrayList();
   }
 
 //TODO: pickup here
