@@ -1,95 +1,174 @@
 var Engine = class Engine {
-  Engine.MAXIND = 3;
-  Engine.START_INDEX = 20;
+  MAXIND = 3;
+  START_INDEX = 20;
   
   Engine(fname){
     //constructor
+    syms = new {};
+    slist = new {};
+
+    makeHeap();
+
+    trail = new {};
+    ustack = new {};
+
+    clauses = dload(fname);
+
+    cls = toNums(clauses);
+
+    query = init();
+
+    vmaps = vcreate(MAXIND);
+    imaps = index(clauses, vmaps);
   }
 
   //declare a lot of variables
-  
+  clauses = new Clause[];
+
+  cls = new int[];
+
+  syms = new LinkedHashMap();
+  slist = new ArrayList();
+
+  /** runtime areas:
+   *
+   * the heap contains code for and clauses their their copies
+   * created during execution
+   *
+   * the trail is an undo list for variable bindings
+   * that facilitates retrying failed goals with alternative
+   * matching clauses
+   *
+   * the unification stack ustack helps handling term unification non-recursively
+   *
+   * the spines stack contains abstractions of clauses and goals and performs the
+   * functions of  both a choice-point stack and goal stack
+   *
+   * imaps: contains indexes for up toMAXIND>0 arg positions (0 for pred symbol itself)
+   *
+   * vmaps: contains clause numbers for which vars occur in indexed arg positions
+   */
+
+  heap = new int[];
+  top = new int;
+  MINSIZE = 1 << 15;
+
+  trail = new IntStack();
+  ustack = new IntStack();
+  spines = new ObStack();
+
+  //don't think this actually needs to be new instantiation
+  query = new Spine();
+
+  imaps = new IMap();
+  vmaps = new IntMap();
+
+  /**
+   * tags of our heap cells - that can also be seen as
+   * instruction codes in a compiled implementation
+   */
+  V = 0;
+  U = 1;
+  R = 2;
+
+  C = 3;
+  N = 4;
+
+  A = 5;
+
+  // G - ground?
+
+  BAD = 7;
+
   /**
    * tags an integer value while fliping it into a negative
    * number to ensure that untagged cells are always negative and the tagged
    * ones are always positive - a simple way to ensure we do not mix them up
    * at runtime
    */
-  function tag(t, w){
+  tag = function (t, w){
     return -((w << 3) + t);
   }
   
   /**
    * removes tag after flipping sign
    */
-  function detag(w){
+  detag = function (w){
     return -w >> 3;
   }
   
   /**
    * extracts the tag of a cell
    */
-  function tagOf(w){
+  tagOf = function (w){
     return -w & 7;
   }
   
   /**
    * places an identifier in the symbol table
    */
-  function addSym(sym){
-    //return int
+  addSym = function (sym){
+    var I = syms.get(sym);
+    if (null == I){
+      i = syms.length();
+      I = i;
+      syms.put(sym,I);
+      slist.add(sym);
+    }
+    return I.value;
   }
   
    /**
    * returns the symbol associated to an integer index
    * in the symbol table
    */
-   function getSym(w){
+  getSym = function (w){
     return //string
-   }
+  }
    
-   function makeHeap(){
+   makeHeap = function (){
    
-   }
+  }
    
-   function makeHeap(size){
+  makeHeap = function (size){
       //size is int  
-   }
+  }
    
-   function getTop(){
+  getTop = function (){
     //return int
-   }
+  }
    
-   function setTop(top){
+  setTop = function (top){
    
-   }
+  }
    
-   function clear(){
+  clear = function (){
     //top=-1
-   }
+  }
    
    /**
    * Pushes an element - top is incremented frirst than the
    * element is assigned. This means top point to the last assigned
    * element - which can be returned with peek().
    */
-  function push(i) {
+  push = function (i) {
     //heap[++top] = i;
   }
 
-  function size() {
+  size = function () {
     //return top + 1;
   }
 
   /**
    * dynamic array operation: doubles when full
    */
-  fucntion expand() {
+  expand = function () {
     //var l = heap.length;
     //var newstack = new int[l << 1];
 
   }
 
-  function ensureSize(more) {
+  ensureSize = function (more) {
     //if (1 + top + more >= heap.length) {
       //expand();
     //}
