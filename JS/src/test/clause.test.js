@@ -6,6 +6,9 @@ describe("Clause", function(){
     it("holds a prolog clause", function(){
         //fake news
         assert.equal(-1, [1,2,3].indexOf(4));
+        var c = cla.main();
+        
+        expect(c).to.deep.equal(true);
     });
     
 });

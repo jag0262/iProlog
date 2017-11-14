@@ -8,3 +8,7 @@ class Clause {
     }
     
 }
+
+exports.main = function(){
+  return true; 
+}
